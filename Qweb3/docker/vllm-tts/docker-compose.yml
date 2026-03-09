@@ -1,0 +1,34 @@
+version: '3.8'
+
+services:
+  qwen-tts:
+    image: vllm/vllm-omni:v0.14.0rc1
+    container_name: qwen-tts-fast
+    runtime: nvidia
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=0
+      - CUDA_DEVICE_ORDER=PCI_BUS_ID
+      - TTS_MODEL=Qwen/Qwen3-TTS-12Hz-0.6B-Base
+      - HF_HOME=/root/.cache/huggingface
+    volumes:
+      - ./server.py:/app/server.py:ro
+      - ~/.cache/huggingface:/root/.cache/huggingface
+      - ./voices:/app/voices
+    ports:
+      - "8000:8000"
+    ipc: host
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+    command: >
+      bash -c "apt-get update && apt-get install -y sox libsox-dev git && pip install fastapi uvicorn soundfile onnxruntime-gpu sox && TORCH_CUDA_ARCH_LIST='12.0' pip install flash-attn --no-build-isolation 2>/dev/null || echo 'Flash-attn build failed, continuing without it' && python /app/server.py"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 120s

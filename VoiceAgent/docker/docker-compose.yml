@@ -1,0 +1,37 @@
+services:
+  llama:
+    image: ghcr.io/ggml-org/llama.cpp:server-cuda
+    container_name: voiceagent-llama
+    ports:
+      - "8080:8080"
+    volumes:
+      - ../models:/models
+    environment:
+      - CUDA_VISIBLE_DEVICES=0
+    command: >
+      -m /models/model.gguf
+      --host 0.0.0.0
+      --port 8080
+      -c 2048
+      -ngl 99
+      -fa on
+      -b 512
+      -ub 512
+      --cont-batching
+      -np 1
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+    restart: unless-stopped
+
+# Usage:
+# 1. Place your GGUF model in the models/ folder as model.gguf
+# 2. Run: docker-compose up -d
+# 3. Test: curl http://localhost:8080/health
+#
+# For different models, change the -m parameter or use environment variables:
+#   MODEL_PATH=/models/your-model.gguf docker-compose up -d

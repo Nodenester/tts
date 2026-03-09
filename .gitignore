@@ -1,0 +1,55 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+
+# Model weights
+*.pt
+*.bin
+*.gguf
+*.safetensors
+models/
+
+# Audio files
+*.wav
+*.mp3
+*.flac
+*.ogg
+*.m4a
+
+# Voice profiles (may contain audio data)
+*.voice
+
+# Environment
+.env
+.env.*
+venv/
+.venv/
+
+# Tools / binaries
+tools/
+
+# Weights & Biases
+wandb/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+Thumbs.db
+.DS_Store
+
+# Misc
+nul
+*.log
+output/
+test_output/
+docker_status.txt
+error.txt
+output.txt
+
+# Claude internal files
+.claude/

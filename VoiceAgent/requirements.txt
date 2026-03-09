@@ -1,0 +1,22 @@
+# Audio capture and processing
+sounddevice>=0.4.6
+numpy>=1.24.0
+
+# Voice Activity Detection
+webrtcvad>=2.0.10
+
+# Speech-to-Text (faster-whisper for low latency)
+faster-whisper>=0.10.0
+
+# LLM Client
+httpx>=0.25.0
+sseclient-py>=1.8.0
+
+# TTS Client (WebSocket streaming)
+websockets>=12.0
+
+# Async utilities
+asyncio-compat>=0.1.0
+
+# Audio playback
+soundfile>=0.12.0
